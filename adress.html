@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Address Book</title>
+    <link rel="stylesheet" href="style2.css" />
+  </head>
+  <body>
+    <h1>Address Book</h1>
+    <div class="form">
+      <div class="input-container">
+        <label for="Name" class="label">Input your full name:</label>
+        <input id="Name" placeholder="Your full name" type="text" />
+      </div>
+      <div class="input-container">
+        <label for="Number" class="label">Input your number:</label>
+        <input id="Number" placeholder="Your number" type="number" />
+      </div>
+      <div class="input-container">
+        <label for="email" class="label">Input your email:</label>
+        <input id="email" placeholder="Your email" type="email" />
+      </div>
+      <button onclick="handleClick()">Save</button>
+      <button id="clearButton" onclick="clearContacts()">
+        Clear information
+      </button>
+      <p>Personal information: <span id="personalInfo"></span></p>
+    </div>
+
+    <script>
+      let contacts = JSON.parse(localStorage.getItem("contacts")) || [];
+
+      function saveInformation() {
+        let fullName = document.getElementById("Name").value;
+        let number = document.getElementById("Number").value;
+        let email = document.getElementById("email").value;
+
+        contacts.push({ fullName, number, email });
+        localStorage.setItem("contacts", JSON.stringify(contacts));
+      }
+
+      function renderContacts() {
+        let personalInfo = `<table><thead><tr><th>Full Name</th><th>Number</th><th>Email</th></tr></thead><tbody>`;
+        for (let i = 0; i < contacts.length; i++) {
+          personalInfo += `<tr><td>${contacts[i].fullName}</td><td>${contacts[i].number}</td><td>${contacts[i].email}</td></tr>`;
+        }
+        personalInfo += `</tbody></table>`;
+        document.getElementById("personalInfo").innerHTML = personalInfo;
+      }
+
+      function handleClick() {
+        saveInformation();
+        renderContacts();
+      }
+
+      function clearContacts() {
+        contacts = [];
+        localStorage.removeItem("contacts");
+        renderContacts();
+      }
+
+      document.addEventListener("DOMContentLoaded", renderContacts);
+    </script>
+  </body>
+</html>
